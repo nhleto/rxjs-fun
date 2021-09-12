@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {fromEvent, merge, Observable} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, take} from 'rxjs/operators';
 
 
 @Component({
@@ -18,12 +18,12 @@ export class TestComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const mouseOver$ = fromEvent(this.button.nativeElement, 'mouseover');
-    const mouseOut$ = fromEvent(this.button.nativeElement, 'mouseover');
+    const mouseOut$ = fromEvent(this.button.nativeElement, 'mouseout');
 
-    merge(mouseOut$, mouseOver$).pipe(
-      debounceTime(100)
-    ).subscribe(x => console.log(x));
+    merge(mouseOut$, mouseOver$)
+      .pipe(take(5))
+      .subscribe(x => console.log(x));
 
-  }
+  } 
 
 }
